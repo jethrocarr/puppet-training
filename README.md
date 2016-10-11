@@ -7,6 +7,12 @@ It provides a stack that should be launched per-user that gives them a
 functional Puppet Master, as well as a client server that can be used to apply
 the Puppet modules onto.
 
+
+# Features
+
+* Ubuntu 16.04 environment
+
+
 # Expected Knowledge
 
 Staff under taking this training must be:
@@ -39,7 +45,7 @@ For each member taking part in training:
     cloudformation \
     create-stack \
     --stack-name "puppet-training-bob" \
-    --template-body file://stack.yaml \
+    --template-body file://resources/stack.yaml \
     --parameters \
     ParameterKey=KeyName,ParameterValue=MyKey \
     ParameterKey=VpcId,ParameterValue=vpc-xyz123 \

@@ -34,8 +34,7 @@ For each member taking part in training:
 1. Create a Key Pair for each user taking part in the training.
 
 2. launch the environment using the `stack.yaml` file. For example:
-
-
+    ```
     aws --profile sandbox \
     cloudformation \
     create-stack \
@@ -45,3 +44,4 @@ For each member taking part in training:
     ParameterKey=KeyName,ParameterValue=MyKey \
     ParameterKey=VpcId,ParameterValue=vpc-xyz123 \
     ParameterKey=SubnetId,ParameterValue=subnet-xyz
+    ```

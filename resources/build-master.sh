@@ -8,7 +8,7 @@
 # Set hostname
 HOSTNAME=master
 hostname ${HOSTNAME}
-echo ${HOSTNAME} >> /etc/hostname
+echo ${HOSTNAME} > /etc/hostname
 echo "127.0.0.1 ${HOSTNAME}" >> /etc/hosts
 
 # Update operating system

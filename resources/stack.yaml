@@ -73,6 +73,49 @@ Resources:
       ToPort: 8140
       SourceSecurityGroupId: !Ref Ec2SecurityGroup
 
+
+  # Define an instance profile that enables the servers to discover their tags
+  # and each other using the CFN stack data. AWS IAM is a bit of a pain here
+  # as there's no easy way we can see "just permit this box to look at itself
+  # and any friends in it's CFN stack" :-(
+  # TODO: Can we lock this down further?
+  DefaultInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref DefaultInstanceRole
+
+  DefaultInstanceRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "ec2.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+
+  DefaultDiscoveryPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "StackMetadata"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action: [ "ec2:DescribeTags", "cloudformation:DescribeStacks" ]
+            Resource: "*"
+      Roles:
+        -
+          Ref: "DefaultInstanceRole"
+
+
   # We need a Puppet Master EC2 instance
   PuppetMaster:
     Type: "AWS::EC2::Instance"
@@ -83,6 +126,7 @@ Resources:
       SubnetId: !Ref SubnetId
       SecurityGroupIds:
         - !Ref Ec2SecurityGroup
+      IamInstanceProfile: !Ref DefaultInstanceProfile
       Tags:
         - Key: "Name"
           Value: !Join [ " ", [ !Ref "AWS::StackName", "Master" ] ]
@@ -98,7 +142,15 @@ Resources:
       SubnetId: !Ref SubnetId
       SecurityGroupIds:
         - !Ref Ec2SecurityGroup
+      IamInstanceProfile: !Ref DefaultInstanceProfile
       Tags:
         - Key: "Name"
           Value: !Join [ " ", [ !Ref "AWS::StackName", "Client" ] ]
       UserData: !Base64 "#!/bin/bash\nwget -O run.sh https://raw.githubusercontent.com/jethrocarr/puppet-training/master/resources/build-client.sh\n. ./run.sh"
+
+
+# Return useful outputs we consume on-server at a later stage
+Outputs:
+  PuppetMasterAddress:
+    Description: Private IP address of Puppet master
+    Value: !GetAtt PuppetMaster.PrivateIp

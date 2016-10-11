@@ -5,6 +5,9 @@
 (
 exec 1> >(logger -s -t user-data) 2>&1
 
+# Set hostname
+hostname client
+
 # Update operating system
 export DEBIAN_FRONTEND=noninteractive
 apt-get update

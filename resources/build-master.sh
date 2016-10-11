@@ -7,6 +7,8 @@
 (
 exec 1> >(logger -s -t user-data) 2>&1
 
+# Set hostname
+hostname master
 
 # Update operating system
 export DEBIAN_FRONTEND=noninteractive

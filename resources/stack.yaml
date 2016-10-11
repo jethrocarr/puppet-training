@@ -52,19 +52,26 @@ Resources:
           ToPort: 22
           CidrIp: "0.0.0.0/0"
 
-        # Puppet Processes
-        # TODO: Change to be self referencing ingress rule.
-        - IpProtocol: tcp
-          FromPort: 8140
-          ToPort: 8140
-          CidrIp: "0.0.0.0/0"
-
         # Allow HTTP for testing webapp build training
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
           CidrIp: "0.0.0.0/0"
 
+  # Because we want to self-reference the security group, this has to be setup
+  # inside a seporate ingress rule. We want to allow the client to talk to the
+  # Puppet master, but not allow access for the wider public internet. Note this
+  # implication is overly lazy, a proper production stack should have two
+  # different security groups so that the client can reach master, but not vice
+  # versa.
+  PuppetPortIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !Ref Ec2SecurityGroup
+      IpProtocol: tcp
+      FromPort: 8140
+      ToPort: 8140
+      SourceSecurityGroupId: !Ref Ec2SecurityGroup
 
   # We need a Puppet Master EC2 instance
   PuppetMaster:

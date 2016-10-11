@@ -35,6 +35,7 @@ For each member taking part in training:
 
 2. launch the environment using the `stack.yaml` file. For example:
 
+
     aws --profile sandbox \
     cloudformation \
     create-stack \

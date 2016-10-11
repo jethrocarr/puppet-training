@@ -79,26 +79,27 @@ cd /home/myrepos/environments
 
 # I especially love how git refuses to run without this >:-(
 export HOME=/root
-git config --global user.email "anon@example.com"
-git config --global user.name "anon"
+git config --global user.email "trainingbot@example.com"
+git config --global user.name "Trainingbot 9000"
 
 # Create new repo
 git init
 echo "master branch is unused, use the per env branches" > README.txt
 git add .
-git commit -am "Initial Commit"
+git commit -am "Seeded master branch"
 
 # Create a production branch otherwise Puppet server can't start up (!!)
 git branch production
 git checkout production
 echo "Currently unused" > README.txt
+git commit -am "Seeded production branch"
 
 # Create training environment branch
 git checkout master
 git branch training
 git checkout training
 echo "Our default branch for training" > README.txt
-git commit -am "Branch for training"
+git commit -am "Seeded training branch"
 
 # Generate Puppetfile
 cat >> Puppetfile << EOF

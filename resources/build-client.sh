@@ -2,8 +2,6 @@
 #
 # Build a client server capable of connecting to the Puppet master
 #
-(
-exec 1> >(logger -s -t user-data) 2>&1
 
 # Set hostname
 hostname client
@@ -12,6 +10,3 @@ hostname client
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get -y upgrade
-
-
-)

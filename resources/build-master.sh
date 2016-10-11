@@ -77,7 +77,8 @@ EOF
 mkdir -p /home/myrepos/environments
 cd /home/myrepos/environments
 
-# Shut git up - user can change this if they really care later.
+# I especially love how git refuses to run without this >:-(
+export HOME=/root
 git config --global user.email "anon@example.com"
 git config --global user.name "anon"
 
@@ -87,7 +88,13 @@ echo "master branch is unused, use the per env branches" > README.txt
 git add .
 git commit -am "Initial Commit"
 
+# Create a production branch otherwise Puppet server can't start up (!!)
+git branch production
+git checkout production
+echo "Currently unused" > README.txt
+
 # Create training environment branch
+git checkout master
 git branch training
 git checkout training
 echo "Our default branch for training" > README.txt
@@ -126,7 +133,7 @@ chown -R ubuntu:ubuntu /home/myrepos
 chmod 700 /home/myrepos
 
 # Deploy with r10k.
-r10k deploy environment
+r10k deploy environment --verbose debug
 
 # Ensure that post-reboot, the Puppet server will start. As soon as that happens
 # the client servers will connect in and do their first Puppet run.
@@ -139,4 +146,4 @@ systemctl enable puppetserver
 systemctl disable puppet
 
 # Reboot to ensure fully patched kernel, etc.
-#reboot
+reboot

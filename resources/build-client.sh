@@ -80,6 +80,8 @@ done
 # training.
 puppet agent --waitforcert 300 --test
 
+# Ensure that Puppet agent remains stopped after reboot.
+systemctl disable puppet
 
 # Reboot to ensure fully patched kernel, etc.
-#reboot
+reboot

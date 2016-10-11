@@ -1,4 +1,4 @@
-Description: Launches a pair of servers for learning Puppet on
+Description: Puppet training environment (github.com/jethrocarr/puppet-training)
 
 # All configuration that the user will probably want to adjust
 Parameters:

@@ -158,3 +158,6 @@ Outputs:
   PuppetMasterAddress:
     Description: Private IP address of Puppet master
     Value: !GetAtt PuppetMaster.PrivateIp
+  PuppetClientAddress:
+    Description: Private IP address of Puppet client
+    Value: !GetAtt PuppetClient.PrivateIp

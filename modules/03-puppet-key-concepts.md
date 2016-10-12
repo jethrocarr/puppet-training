@@ -721,9 +721,9 @@ And execute on the client:
      echo "MY SERVER IS THE BEST SERVER"
     +echo "Today's Horoscope is: You will die a horrible horrible death"
     +
-   Info: Computing checksum on file /etc/update-motd.d/99-puppetftw
-   Info: /Stage[main]/Soe/File[/etc/update-motd.d/99-puppetftw]: Filebucketed /etc/update-motd.d/99-puppetftw to puppet with sum af0ae8bdbce026888ce1347233a1eeab
-   Notice: /Stage[main]/Soe/File[/etc/update-motd.d/99-puppetftw]/content: content changed '{md5}af0ae8bdbce026888ce1347233a1eeab' to '{md5}1f9f0ed8f8a25d8fdccadf4314843b85'
+    Info: Computing checksum on file /etc/update-motd.d/99-puppetftw
+    Info: /Stage[main]/Soe/File[/etc/update-motd.d/99-puppetftw]: Filebucketed /etc/update-motd.d/99-puppetftw to puppet with sum af0ae8bdbce026888ce1347233a1eeab
+    Notice: /Stage[main]/Soe/File[/etc/update-motd.d/99-puppetftw]/content: content changed '{md5}af0ae8bdbce026888ce1347233a1eeab' to '{md5}1f9f0ed8f8a25d8fdccadf4314843b85'
 
 We can see here that Puppet has taken the param from the `soe` class and
 inserted it into the ERB template.

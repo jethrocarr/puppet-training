@@ -595,8 +595,92 @@ master as well.
     Info: Applying configuration version '1476265496'
     Notice: Hello World
     Notice: /Stage[main]/Main/Node[default]/Notify[Hello World]/message: defined 'message' as 'Hello World'
+    Notice: /Stage[main]/Soe/Service[vsftpd]/ensure: ensure changed 'running' to 'stopped'
+    Notice: /Stage[main]/Soe/Package[vsftpd]/ensure: removed
     Notice: /Stage[main]/Soe/Package[emacs]/ensure: removed
     Notice: Applied catalog in 3.16 seconds
+
+Wow what happened here? Well we haven't run the Puppet agent on the master in
+quite a while and Puppet does not forget - it knows the server state no longer
+reflects our desired state and brings it inline by purging `emacs`, as well as
+applying the vsftpd changes we made in the past.
+
+What about the client server? We still want `emacs` there...
+
+    ubuntu@client:~$ sudo puppet agent --test
+    Info: Using configured environment 'training'
+    Info: Retrieving pluginfacts
+    Info: Retrieving plugin
+    Info: Loading facts
+    Info: Caching catalog for client
+    Info: Applying configuration version '1476265697'
+    Notice: my s_client module is loading!
+    Notice: /Stage[main]/S_client/Notify[my s_client module is loading!]/message: defined 'message' as 'my s_client module is loading!'
+    Notice: Applied catalog in 0.88 seconds
+
+Nothing happened - but that's because we already have it installed, so there's
+nothing to do.
+
+    ubuntu@client:~$ dpkg -s emacs | grep Status
+    Status: install ok installed
+
+
+## Task 09: Dropping Files
+
+Currently our servers have some rather dull Ubuntu messages when we login in
+the MOTD. Let's drop some additions to liven things up.
+
+First let's create a template file. These are files that can be dropped as-is,
+or can include dynamic logic to adjust the file contents based on various logic.
+
+    ubuntu@master:/home/myrepos/soe$ mkdir templates
+    ubuntu@master:/home/myrepos/soe$ cat templates/motd.erb
+    #!/bin/bash
+    echo "MY SERVER IS THE BEST SERVER"
+
+Now let's define a file resource in our `soe` class that uses this template.
+
+    ubuntu@master:/home/myrepos/soe$ cat manifests/init.pp
+    # ...
+    class soe {
+      ...
+      file { '/etc/update-motd.d/99-puppetftw':
+        ensure  => file,
+        mode    => '0755',
+        owner   => 'root',
+        group   => 'root',
+        content => template("soe/motd.erb")
+      }
+      ...
+    }
+
+And we commit the changes- don't forget to add the new file!
+
+    ubuntu@master:/home/myrepos/soe$ git add templates/motd.erb
+    ubuntu@master:/home/myrepos/soe$ git commit -am "Added custom MOTD"
+
+Now let's try it out on the client:
+
+    ubuntu@client:~$ sudo puppet agent --test
+    Notice: /Stage[main]/Soe/File[/etc/update-motd.d/99-puppetftw]/ensure: defined content as '{md5}af0ae8bdbce026888ce1347233a1eeab'
+
+To validate success, try logging in with a new session:
+
+    $ ssh ubuntu@client
+    ...
+    MY SERVER IS THE BEST SERVER
+    Last login: Wed Oct 12 07:56:43 2016 from 203.86.201.9
+    ubuntu@client:~$
+
+Note that in the above example, we've used a Puppet `template` to drop what is
+currently a static file. Puppet frowns on this and prefers that you use the file
+functionality offered for static files which is higher performance. However it
+is the recommendation of the author that you should only ever be dropping config
+which is almost always going to be templated and instead pull purely static
+files from a service like S3 or in the form of an OS package. This is especially
+important for large files (eg JRE/JDK installers) which should not be living in
+Git.
+
 
 
 ## Homework

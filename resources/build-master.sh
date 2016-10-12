@@ -11,6 +11,9 @@ hostname ${HOSTNAME}
 echo ${HOSTNAME} > /etc/hostname
 echo "127.0.0.1 ${HOSTNAME}" >> /etc/hosts
 
+# Prevent SSH timeout
+echo "ClientAliveInterval 180" >> /etc/ssh/sshd_config
+
 # Update operating system
 export DEBIAN_FRONTEND=noninteractive
 apt-get update

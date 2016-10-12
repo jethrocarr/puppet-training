@@ -32,9 +32,11 @@ Staff under taking this training must be:
 
 # Training Materials
 
-All the training materials are located at TODO. Use the information below to
-provision an environment per-user, then once done you'll be ready to execute
-the training.
+All the training materials are located inside the `modules` directory. The
+various modules are numbered sequentially and should be followed in that order.
+
+Before starting the modules, make sure you have provisioned a stack per-user
+and validated correct operation of the environment.
 
 
 # Can I use this for provisioning a real production environment?

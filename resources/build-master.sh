@@ -55,7 +55,7 @@ cat > /etc/puppetlabs/r10k/r10k.yaml << EOF
 :sources:
   # This will clone the git repository and instantiate an environment per
   # branch in /etc/puppetlabs/code/environments
-  :my-org:
+  :environments:
     remote: '/home/myrepos/environments'
     basedir: '/etc/puppetlabs/code/environments'
 EOF
@@ -71,7 +71,7 @@ on disk.
 Just think of each directory under /home/myrepos/ as being a seporate Github
 repo, so to list all your repos, do:
 
-    ls -l1 /home/myrepos
+    ls -1 /home/myrepos
 EOF
 
 mkdir -p /home/myrepos/environments
@@ -117,6 +117,8 @@ mod 'puppetlabs/vcsrepo'
 mod 'puppetlabs/git'
 
 EOF
+git add Puppetfile
+git commit -am "Added the Puppetfile"
 
 # Generate a default site.pp file
 mkdir manifests
@@ -129,6 +131,7 @@ EOF
 git add manifests
 git commit -am "Seed the site.pp with a default node"
 
+
 # Grant ownership to training user
 chown -R ubuntu:ubuntu /home/myrepos
 chmod 700 /home/myrepos
@@ -140,7 +143,7 @@ cat > /usr/local/bin/addcommithook << EOF
 # Write commit hook for r10k
 cat > .git/hooks/post-commit << END1
 # Trigger an r10k run upon commit
-exec sudo r10k deploy environment --verbose debug
+exec sudo r10k deploy environment -p --verbose info
 END1
 chmod 755 .git/hooks/post-commit
 EOF
@@ -150,7 +153,7 @@ chmod 755 /usr/local/bin/addcommithook
 /usr/local/bin/addcommithook
 
 # Deploy with r10k.
-r10k deploy environment --verbose debug
+r10k deploy environment -p --verbose debug
 
 # Ensure that post-reboot, the Puppet server will start. As soon as that happens
 # the client servers will connect in and do their first Puppet run.

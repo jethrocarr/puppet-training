@@ -133,6 +133,22 @@ git commit -am "Seed the site.pp with a default node"
 chown -R ubuntu:ubuntu /home/myrepos
 chmod 700 /home/myrepos
 
+# This is some evilness - we create a tool that sets up commit hooks that
+# triggers r10k for any commit in the repo.
+cat > /usr/local/bin/addcommithook << EOF
+#!/bin/bash
+# Write commit hook for r10k
+cat > .git/hooks/post-commit << END1
+# Trigger an r10k run upon commit
+exec sudo r10k deploy environment --verbose debug
+END1
+chmod 755 .git/hooks/post-commit
+EOF
+chmod 755 /usr/local/bin/addcommithook
+
+# Setup commit hook for our main environments repo (cwd)
+/usr/local/bin/addcommithook
+
 # Deploy with r10k.
 r10k deploy environment --verbose debug
 

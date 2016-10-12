@@ -161,9 +161,9 @@ r10k deploy environment -p --verbose debug
 # Setup better syntax handling in Vim out-of-the-box
 # TODO: Not totally happy with this, autoindent not working right for example.
 apt-get -y install vim-puppet vim-tabular
-vim-addons install puppet
-vim-addons install tabular
-cat > ~/.vimrc << EOF
+vim-addons -w install puppet
+vim-addons -w install tabular
+cat > /home/ubuntu/.vimrc << EOF
 set shiftwidth=2
 set tabstop=2
 set softtabstop=2

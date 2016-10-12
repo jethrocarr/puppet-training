@@ -102,7 +102,12 @@ file, and change the message we are returning to the default node definition
 Now run Puppet on the client server again. You will notice that nothing has
 changed. That's because we have not committed the repo yet.
 
-Let's commit the change back on the master:
+First let's setup our Git settings for this machine:
+
+    ubuntu@master:/home/myrepos/environments$  git config --global user.email "you@clickbait.example"
+    ubuntu@master:/home/myrepos/environments$  git config --global user.name "Your Name"
+
+Now let's commit the change back on the master:
 
      ubuntu@master:/home/myrepos/environments$ git commit -am "I can haz commit?"
      INFO   	 -> Deploying environment /etc/puppetlabs/code/environments/master
@@ -139,6 +144,10 @@ and validated end-to-end functionality of your environment.
 
 
 ## Homework
+
+Any time you see homework, it's some additional interesting challenges to look
+at or questions to solve - feel free to do these during training if you're ahead
+of the masses.
 
 * Learn about the different ways Puppet agent can be run.
 * Is there a way Puppet can be disabled on a system?

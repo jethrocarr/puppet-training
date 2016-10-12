@@ -86,5 +86,10 @@ puppet agent --waitforcert 300 --test
 # Ensure that Puppet agent remains stopped after reboot.
 systemctl disable puppet
 
+# Help the user remember to run Puppet in sudo
+cat >> /home/ubuntu/.bashrc << EOF
+alias puppet='echo "need to run me in sudo"'
+EOF
+
 # Reboot to ensure fully patched kernel, etc.
 reboot

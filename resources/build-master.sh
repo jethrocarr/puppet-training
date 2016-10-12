@@ -158,6 +158,19 @@ chmod 755 /usr/local/bin/addcommithook
 # Deploy with r10k.
 r10k deploy environment -p --verbose debug
 
+# Setup better syntax handling in Vim out-of-the-box
+# TODO: Not totally happy with this, autoindent not working right for example.
+apt-get -y install vim-puppet vim-tabular
+vim-addons install puppet
+vim-addons install tabular
+cat > ~/.vimrc << EOF
+set shiftwidth=2
+set tabstop=2
+set softtabstop=2
+set expandtab
+set smartindent
+EOF
+
 # Ensure that post-reboot, the Puppet server will start. As soon as that happens
 # the client servers will connect in and do their first Puppet run.
 systemctl enable puppetserver

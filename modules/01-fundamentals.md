@@ -77,7 +77,7 @@ We are now going to make a change on the Puppet master and validate that it gets
 reflected on the client. In order to do this, we are going to connect to the
 master:
 
-  ssh ubuntu@master
+    ssh ubuntu@master
 
 In a real world environment, we would store all the Puppet modules in a git
 service such as Github or Bitbucket. For training purposes, we have setup
@@ -105,13 +105,18 @@ changed. That's because we have not committed the repo yet.
 Let's commit the change back on the master:
 
      ubuntu@master:/home/myrepos/environments$ git commit -am "I can haz commit?"
-     [2016-10-12 00:44:34 - DEBUG] Fetching '/home/myrepos/environments' to determine current branches.
-     [2016-10-12 00:44:34 - INFO] Deploying environment /etc/puppetlabs/code/environments/master
-     [2016-10-12 00:44:34 - INFO] Environment master is now at 152f2096e7ce8c46f87557af7de4c684db38c97b
-     [2016-10-12 00:44:34 - INFO] Deploying environment /etc/puppetlabs/code/environments/production
-     [2016-10-12 00:44:34 - INFO] Environment production is now at 12408db94266e58796b7de2d40b44e8df89ada6d
-     [2016-10-12 00:44:34 - INFO] Deploying environment /etc/puppetlabs/code/environments/training
-     [2016-10-12 00:44:34 - INFO] Environment training is now at 4eacb6016a924f3a5e9709d881c28f8b3cfa1816
+     INFO   	 -> Deploying environment /etc/puppetlabs/code/environments/master
+     INFO   	 -> Environment master is now at 91d4c5cf4599a6697a9d081851d9811653ff9e9e
+     INFO   	 -> Deploying environment /etc/puppetlabs/code/environments/production
+     INFO   	 -> Environment production is now at 2e27fb65c8010fd1311868a4dab817b78e7e2bf2
+     INFO   	 -> Deploying environment /etc/puppetlabs/code/environments/training
+     INFO   	 -> Environment training is now at 3a01528f944e2d201d438e61554a3c01da9a0d85
+     INFO   	 -> Deploying Puppetfile content /etc/puppetlabs/code/environments/training/modules/stdlib
+     INFO   	 -> Deploying Puppetfile content /etc/puppetlabs/code/environments/training/modules/ruby
+     INFO   	 -> Deploying Puppetfile content /etc/puppetlabs/code/environments/training/modules/gcc
+     INFO   	 -> Deploying Puppetfile content /etc/puppetlabs/code/environments/training/modules/inifile
+     INFO   	 -> Deploying Puppetfile content /etc/puppetlabs/code/environments/training/modules/vcsrepo
+     INFO   	 -> Deploying Puppetfile content /etc/puppetlabs/code/environments/training/modules/git
      [training 4eacb60] I can haz commit?
      1 file changed, 1 insertion(+), 1 deletion(-)
 
@@ -131,3 +136,12 @@ handiwork.
 
 If this worked - congrats! You've made your first change to a Puppet manifest
 and validated end-to-end functionality of your environment.
+
+
+## Homework
+
+* Learn about the different ways Puppet agent can be run.
+* Is there a way Puppet can be disabled on a system?
+
+https://docs.puppet.com/puppet/4.7/reference/services_agent_unix.html
+https://docs.puppet.com/puppet/latest/reference/man/agent.html

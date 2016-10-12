@@ -181,5 +181,14 @@ systemctl enable puppetserver
 # to launch until the certs are signed... which naturally leads to some issues.
 systemctl disable puppet
 
+# Configure everything we need for the Puppet agent so that it's ready for us
+# to enable in future as part of our exercises.
+echo "127.0.0.1 puppet" >> /etc/hosts
+cat >> /etc/puppetlabs/puppet/puppet.conf << EOF
+[main]
+  certname = ${HOSTNAME}
+  environment = training
+EOF
+
 # Reboot to ensure fully patched kernel, etc.
 reboot

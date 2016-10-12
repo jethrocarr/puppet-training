@@ -93,7 +93,7 @@ You can see that we have an `environments` directory and a README file.
 Inside the environments directory we have a `manifests/site.pp` file. Edit this
 file, and change the message we are returning to the default node definition
 
-    ubuntu@master:/home/myrepos/environments$ cat manifests/site.pp
+    ubuntu@master:/home/myrepos/environments$ vim manifests/site.pp
     # Default Node configuration
     node default {
       notify { 'Hello World!': }

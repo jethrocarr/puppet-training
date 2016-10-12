@@ -61,7 +61,7 @@ From the above:
 We now have a nice new module that does... exactly nothing. Let's add a message
 to the module so we can validate it actually working.
 
-    ubuntu@master:/home/myrepos/s_client# cat manifests/init.pp
+    ubuntu@master:/home/myrepos/s_client# vim manifests/init.pp
     # ...
     class s_client {
       notify { 'My s_client module is loading!': }
@@ -77,7 +77,7 @@ and add this new `s_client` module to the Puppet file.
 
     ubuntu@master:/home/myrepos/s_client$ cd /home/myrepos/environments/
     ubuntu@master:/home/myrepos/environments$
-    ubuntu@master:/home/myrepos/environments$ cat Puppetfile
+    ubuntu@master:/home/myrepos/environments$ vim Puppetfile
     # This is a Puppetfile. It is used by r10k to collate multiple repos and
     # dependencies together to form a single application.
     # https://github.com/puppetlabs/r10k
@@ -100,7 +100,7 @@ This will make the `s_client` module available from manifests, but by itself
 it will do nothing. We should edit our `site.pp` file and specifically set our
 server to use this module.
 
-    ubuntu@master:/home/myrepos/environments$ cat manifests/site.pp
+    ubuntu@master:/home/myrepos/environments$ vim manifests/site.pp
     # Default Node configuration
     node default {
       notify { 'Hello World!': }
@@ -169,7 +169,7 @@ useful and install our favorite application - `htop`, a better version of `top`.
 To do this, we'll use a built-in Puppet resource (Package), which will look like
 the following:
 
-    ubuntu@master:/home/myrepos/soe$ cat manifests/init.pp
+    ubuntu@master:/home/myrepos/soe$ vim manifests/init.pp
     # ...
     class soe {
       # Fix terrible package selection on our servers
@@ -180,7 +180,7 @@ the following:
 
 And we'll amend our `site.pp` file to include the SOE module for all servers:
 
-    ubuntu@master:/home/myrepos/environments$ cat manifests/site.pp
+    ubuntu@master:/home/myrepos/environments$ vim manifests/site.pp
     # Default Node configuration
     node default {
       notify { 'Hello World!': }
@@ -262,7 +262,7 @@ Turns out we have a corporate policy at Clickbait Enterprise Ltd to ensure that
 
 Now we could be silly and do it this way:
 
-    ubuntu@master:/home/myrepos/soe$ cat manifests/init.pp
+    ubuntu@master:/home/myrepos/soe$ vim manifests/init.pp
     # ...
     class soe {
       # Fix terrible package selection on our servers
@@ -280,7 +280,7 @@ Now we could be silly and do it this way:
 Or we can take advantage of the fact that Puppet accepts an array/list as the
 name of any resource definition, and do something smarter:
 
-    ubuntu@master:/home/myrepos/soe$ cat manifests/init.pp
+    ubuntu@master:/home/myrepos/soe$ vim manifests/init.pp
     # ...
     class soe {
       # Fix terrible package selection on our servers
@@ -342,7 +342,7 @@ Let's install `bundler`, a Ruby package for managing dependencies inside other
 Ruby packages. Bundler is available via the Ruby Gems service and we can add it
 by adjusting the `manifests/init.pp` in our `soe` module.
 
-    ubuntu@master:/home/myrepos/soe$ cat manifests/init.pp
+    ubuntu@master:/home/myrepos/soe$ vim manifests/init.pp
     # ...
     class soe {
       # Fix terrible package selection on our servers
@@ -381,7 +381,7 @@ automatically.
 Let's fix it by adding the `ruby` package (that provides `gem`) to our `soe`
 module and trying again.
 
-    ubuntu@master:/home/myrepos/soe$ cat manifests/init.pp
+    ubuntu@master:/home/myrepos/soe$ vim manifests/init.pp
     # ...
     class soe {
       # Fix terrible package selection on our servers
@@ -434,7 +434,7 @@ laughing stock of the internet community!
 
 We better remove it from the `soe` module:
 
-    ubuntu@master:/home/myrepos/soe$ cat manifests/init.pp
+    ubuntu@master:/home/myrepos/soe$ vim manifests/init.pp
     # ...
     class soe {
       # Fix terrible package selection on our servers
@@ -477,7 +477,7 @@ undefined resources by default.
 We need to explicitly ensure the unwanted package is purged from the server
 fleet by adding an `ensure => absent`.
 
-    ubuntu@master:/home/myrepos/soe$ cat manifests/init.pp
+    ubuntu@master:/home/myrepos/soe$ vim manifests/init.pp
     # ...
     class soe {
       # Fix terrible package selection on our servers
@@ -534,7 +534,7 @@ her slack messages, she's downstairs getting coffee right now!
 
 Let's quickly hack a fix into our `soe` module:
 
-    ubuntu@master:/home/myrepos/soe$ cat manifests/init.pp
+    ubuntu@master:/home/myrepos/soe$ vim manifests/init.pp
     # ...
     class soe {
 
@@ -634,13 +634,13 @@ First let's create a template file. These are files that can be dropped as-is,
 or can include dynamic logic to adjust the file contents based on various logic.
 
     ubuntu@master:/home/myrepos/soe$ mkdir templates
-    ubuntu@master:/home/myrepos/soe$ cat templates/motd.erb
+    ubuntu@master:/home/myrepos/soe$ vim templates/motd.erb
     #!/bin/bash
     echo "MY SERVER IS THE BEST SERVER"
 
 Now let's define a file resource in our `soe` class that uses this template.
 
-    ubuntu@master:/home/myrepos/soe$ cat manifests/init.pp
+    ubuntu@master:/home/myrepos/soe$ vim manifests/init.pp
     # ...
     class soe {
       ...
@@ -680,6 +680,53 @@ which is almost always going to be templated and instead pull purely static
 files from a service like S3 or in the form of an OS package. This is especially
 important for large files (eg JRE/JDK installers) which should not be living in
 Git.
+
+
+## Task 10: Params & ERB Templates
+
+Let's give our MOTD template something to deploy by adding a parameter to our
+`soe` class:
+
+    ubuntu@master:/home/myrepos/soe$ vim manifests/init.pp
+    ...
+    class soe (
+      $horoscope = 'You will die a horrible horrible death'
+    ) {
+    ...
+
+We can then reference this variable inside the template, like the following:
+
+    ubuntu@master:/home/myrepos/soe$ vim templates/motd.erb
+    #!/bin/bash
+    echo "MY SERVER IS THE BEST SERVER"
+    echo "Today's Horoscope is: <%= @horoscope %>"
+
+The template follows the ERB format which is annoyingly different to the style
+of Puppet's DSL, the most obvious difference being the use of `@` vs `$` for
+variable names.
+https://docs.puppet.com/puppet/4.7/reference/lang_template_erb.html
+
+Let's commit both the `manifest` and the `template` change with:
+
+    ubuntu@master:/home/myrepos/soe$ git commit -am "Now 10% more clickbaity"
+
+And execute on the client:
+
+    ubuntu@client:~$ sudo puppet agent --test
+    Notice: /Stage[main]/Soe/File[/etc/update-motd.d/99-puppetftw]/content:
+    --- /etc/update-motd.d/99-puppetftw	2016-10-12 10:12:22.312925955 +0000
+    +++ /tmp/puppet-file20161012-8360-1y07vh	2016-10-12 10:33:13.895985475 +0000
+    @@ -1,2 +1,4 @@
+     #!/bin/bash
+     echo "MY SERVER IS THE BEST SERVER"
+    +echo "Today's Horoscope is: You will die a horrible horrible death"
+    +
+   Info: Computing checksum on file /etc/update-motd.d/99-puppetftw
+   Info: /Stage[main]/Soe/File[/etc/update-motd.d/99-puppetftw]: Filebucketed /etc/update-motd.d/99-puppetftw to puppet with sum af0ae8bdbce026888ce1347233a1eeab
+   Notice: /Stage[main]/Soe/File[/etc/update-motd.d/99-puppetftw]/content: content changed '{md5}af0ae8bdbce026888ce1347233a1eeab' to '{md5}1f9f0ed8f8a25d8fdccadf4314843b85'
+
+We can see here that Puppet has taken the param from the `soe` class and
+inserted it into the ERB template.
 
 
 

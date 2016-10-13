@@ -13,6 +13,8 @@ depressing and require something more cheerful.
 
 Let's go and create a common Hiera file that applies to all servers:
 
+    ssh ubuntu@$PUPPETMASTER
+    
     ubuntu@master:~$ cd /home/myrepos/environments/
     ubuntu@master:/home/myrepos/environments$ mkdir hieradata
     ubuntu@master:/home/myrepos/environments$ vim hieradata/common.yaml
@@ -24,6 +26,8 @@ Let's go and create a common Hiera file that applies to all servers:
 
 Let's see if that worked:
 
+    ssh ubuntu@$PUPPETCLIENT
+    
     ubuntu@client:~$ sudo puppet agent --test
     --- /etc/update-motd.d/99-puppetftw	2016-10-12 10:33:13.927984669 +0000
     +++ /tmp/puppet-file20161012-8460-ttabgo	2016-10-12 10:46:02.844391163 +0000

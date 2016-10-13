@@ -39,6 +39,8 @@ This task is instructor led.
 We're going to use some of what we learnt to create a new service module for
 our Ubuntu client server.
 
+    ssh ubuntu@$PUPPETMASTER
+    
     ubuntu@master:~$ cd /home/myrepos
     ubuntu@master:/home/myrepos$ puppet module generate clickbait-s_client
     # Defaults are fine
@@ -129,6 +131,8 @@ Let's commit both the `Puppetfile` and the `manifests/site.pp` changes:
 
 We should now see Puppet run on the client and produce our latest message:
 
+    ssh ubuntu@$PUPPETCLIENT
+    
     ubuntu@client:~$ sudo puppet agent --test
     Info: Using configured environment 'training'
     Info: Retrieving pluginfacts

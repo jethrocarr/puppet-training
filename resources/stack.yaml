@@ -132,7 +132,7 @@ Resources:
           Value: !Join [ " ", [ !Ref "AWS::StackName", "Master" ] ]
         - Key: "User"
           Value: !Ref KeyName
-      UserData: !Base64 "#!/bin/bash\nwget -O run.sh https://raw.githubusercontent.com/jethrocarr/puppet-training/master/resources/build-master.sh\n. ./run.sh"
+      UserData: !Base64 "#include\nhttps://raw.githubusercontent.com/jethrocarr/puppet-training/master/resources/build-master.sh"
 
   # Client server for applying Puppet against.
   PuppetClient:
@@ -150,7 +150,7 @@ Resources:
           Value: !Join [ " ", [ !Ref "AWS::StackName", "Client" ] ]
         - Key: "User"
           Value: !Ref KeyName
-      UserData: !Base64 "#!/bin/bash\nwget -O run.sh https://raw.githubusercontent.com/jethrocarr/puppet-training/master/resources/build-client.sh\n. ./run.sh"
+      UserData: !Base64 "#include\nhttps://raw.githubusercontent.com/jethrocarr/puppet-training/master/resources/build-client.sh"
 
 
 # Return useful outputs we consume on-server at a later stage

@@ -190,10 +190,5 @@ cat >> /etc/puppetlabs/puppet/puppet.conf << EOF
   environment = training
 EOF
 
-# Help the user remember to run Puppet in sudo
-cat >> /home/ubuntu/.bashrc << EOF
-alias puppet='echo "need to run me with sudo puppet"'
-EOF
-
 # Reboot to ensure fully patched kernel, etc.
 reboot

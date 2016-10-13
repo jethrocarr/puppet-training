@@ -294,6 +294,7 @@ Let's commit our change on the master:
     ubuntu@master:/home/myrepos/soe$ git commit -am "Added awesome extra packages"
 
 And then run Puppet on the client:
+
     ubuntu@client:~$ sudo puppet agent --test
 
 Did you notice it taking a particularly long time where it seemed to do nothing

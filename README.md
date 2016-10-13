@@ -19,6 +19,7 @@ the configuration can be complex and varies a lot per environment.
 * Ubuntu 16.04 with Puppet 4.
 * Creates Puppet master plus node for testing Puppet modules on.
 * Sets up r10k workflow.
+* Provides various learning exercises
 
 
 # Expected Knowledge

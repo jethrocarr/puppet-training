@@ -13,9 +13,16 @@ The following information should be provided by your trainer:
 * IP/name of the Puppet master server.
 * IP/name of the Puppet ubuntu client server.
 
+### Set up the server names in your shell (optional)
+
+In your shell, set variables to hold the puppet master and client names:
+
+    export PUPPETMASTER=supplied_by_trainer
+    export PUPPETCLIENT=supplied_by_client
+
 You should be able to connect with:
 
-    ssh ubuntu@HOSTNAME
+    ssh ubuntu@$PUPPETCLIENT
 
 If your SSH key is not the usual `.ssh/id-rsa`, you may need to select your key
 with `ssh -i KEYNAME ubuntu@HOSTNAME`.
@@ -77,7 +84,7 @@ We are now going to make a change on the Puppet master and validate that it gets
 reflected on the client. In order to do this, we are going to connect to the
 master:
 
-    ssh ubuntu@master
+    ssh ubuntu@$PUPPETMASTER
 
 In a real world environment, we would store all the Puppet modules in a git
 service such as Github or Bitbucket. For training purposes, we have setup

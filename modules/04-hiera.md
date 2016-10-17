@@ -40,3 +40,6 @@ Let's see if that worked:
 
 
 ## Task 03: Using the hierarachy
+
+TODO: Pending free time to complete.
+
